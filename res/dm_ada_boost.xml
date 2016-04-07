@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--Aop 日志打印配置-->
+    <bean id="aopLog4jCommon" class="com.funcoming.dm.aop.log.AOPLog4J"></bean>
+    <!--<bean id="aopLog4jSpecial" class="com.funcoming.dm.aop.log.AOPLog4J"></bean>-->
+    <aop:config>
+        <!--配置一个通用切面bean用来处理-->
+        <aop:aspect id="firstAspect" ref="aopLog4jCommon">
+            <!--配置需要日志服务的切入点-->
+            <aop:pointcut id="common" expression="execution(* com.funcoming.dm.*.*(..))"/>
+            <!--<aop:pointcut id="special" expression="execution(* com.funcoming.dm.*.*(..))"/>-->
+            <aop:before method="commonBeforeMethod" pointcut-ref="common"/>
+            <aop:around method="commondAround" pointcut-ref="common"/>
+            <aop:after-returning method="commonAfterReturning" pointcut-ref="common" returning="returnValue"/>
+        </aop:aspect>
+        <!--<aop:aspect id="secondAspect" ref="aopLog4jSpecial"></aop:aspect>-->
+    </aop:config>
+    <!--Aop 日志打印配置-->
+</beans>
