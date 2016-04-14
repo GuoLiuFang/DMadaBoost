@@ -36,13 +36,18 @@ public class AOPLog4J implements Serializable {
     }
 
     public void commondAround(ProceedingJoinPoint proceedingJoinPoint) {
+        logger.debug(proceedingJoinPoint.toLongString());
         long startTime = System.currentTimeMillis();
         try {
             proceedingJoinPoint.proceed();//切入点的方法继续执行
             long finishTime = System.currentTimeMillis();
             logger.debug(proceedingJoinPoint.toString() + "函数的执行Time是" + (finishTime - startTime) + "毫秒");
         } catch (Throwable throwable) {
-//            throwable.printStackTrace();
+            Object[] args = proceedingJoinPoint.getArgs();
+            for (Object object :
+                    args) {
+                logger.debug(proceedingJoinPoint.toString() + "函数的input是" + object.toString());
+            }
             logger.error("函数执行发生错误或者异常" + throwable);
         }
     }
